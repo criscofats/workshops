@@ -1,6 +1,5 @@
 ---
 - name: Download aap.tar.gz from specified URL
-  delegate_to: localhost
   block:
     - name: Enforce use of user/password for AAP download
       ansible.builtin.assert:
@@ -15,7 +14,7 @@
     - name: Download AAP tarball
       ansible.builtin.get_url:
         url: "{{ aap_download_url }}"
-        dest: "{{ playbook_dir }}/aap.tar.gz"
+        dest: "{{ tempdir.path }}/aap.tar.gz"
         username: "{{ aap_download_user }}"
         password: "{{ aap_download_password }}"
         force_basic_auth: true

@@ -1,17 +1,17 @@
 ---
 - name: Create tmp directory to store AAP tar.gz
-  tempfile:
+  ansible.builtin.file:
+    path: /tmp/ansibletmp
     state: directory
-    suffix: "aapbundle"
   register: tempdir
 
-- name: copy AAP tar.gz
-  copy:
-    src: "{{ aap_archive | default(playbook_dir + '/aap.tar.gz') }}"
-    dest: "{{ tempdir.path }}/aap.tar.gz"
+#- name: copy AAP tar.gz
+#  copy:
+#    src: "{{ aap_archive | default(playbook_dir + '/aap.tar.gz') }}"
+#    dest: "{{ tempdir.path }}/aap.tar.gz"
 
 - name: Create directory for automation controller
-  file:
+  ansible.builtin.file:
     path: "{{ aap_dir }}"
     state: directory
 
@@ -22,14 +22,29 @@
     remote_src: true
     extra_opts: ['--strip-components=1', '--show-stored-names']
 
+- name: Set AAP local repository on controller node
+  ansible.builtin.yum_repository:
+    name: aap_installer
+    description: aap_installer
+    baseurl: "file:///{{ aap_dir }}/bundle/packages/el8/repos/"
+    gpgcheck: false
+  become: true
+
+- name: Install vimrc in home directory
+  ansible.builtin.template:
+    src: vimrc.j2
+    dest: "/home/{{ username }}/.vimrc"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+
 - name: Read group vars file
   ansible.builtin.shell: "cat {{ aap_dir }}/group_vars/all"
   register: __read_results
 
 - name: Parse the yaml into variable
-  set_fact:
+  ansible.builtin.set_fact:
     __aap_global_vars: "{{ __read_results.stdout | from_yaml }}"
 
 - name: Register the aap version
-  set_fact:
+  ansible.builtin.set_fact:
     __aap_version: "{{ __aap_global_vars.automation_platform_version }}"

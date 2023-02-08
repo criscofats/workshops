@@ -8,7 +8,7 @@
 [servicescatalog_workers]
 
 [all:vars]
-admin_password='{{admin_password}}'
+admin_password='{{ admin_password }}'
 automationcontroller_client_max_body_size='20M'
 
 pg_host=''
@@ -16,7 +16,7 @@ pg_port=''
 
 pg_database='awx'
 pg_username='awx'
-pg_password='{{admin_password}}'
+pg_password='{{ admin_password }}'
 pg_sslmode='prefer'  # set to 'verify-full' for client-side enforced SSL
 
 gpgcheck='{{ gpgcheck | default(1)}}'

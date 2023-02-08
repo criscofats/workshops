@@ -1,0 +1,34 @@
+---
+- name: Push Workflow
+  hosts: "{{ HOSTS | default('control[0]') }}"
+  connection: local
+  gather_facts: false
+  collections:
+    - awx.awx
+  vars_files:
+    - allworkflows.yaml
+
+  tasks:
+    - name: Create tmp directory to store allworkflows.yaml
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: "workflow"
+      register: tempdir
+
+    - name: Copy allworkflows.yaml to tempdir
+      ansible.builtin.copy:
+        src: "{{ allworkflows | default(playbook_dir + '/allworkflows.yaml') }}"
+        dest: "{{ tempdir.path }}/allworkflows.yaml"
+
+    - name: Push workflows to controller
+      workflow_job_template:
+        name: "{{ __workflow_loop_item.name }}"
+        schema: "{{ __workflow_loop_item.related.workflow_nodes }}"
+        controller_host: https://<student>.<ec2_name_prefix>.<workshop_dns_zone>
+        controller_username: admin
+        controller_password: '<admin_password>'
+        validate_certs: false
+      loop: "{{ assets.workflow_job_templates }}"
+      loop_control:
+        loop_var: __workflow_loop_item
+...

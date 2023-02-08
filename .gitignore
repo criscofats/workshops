@@ -1,6 +1,6 @@
 secrets.yml
 users.yml
-extra_vars.yml
+*extra_vars.yml*
 *.txt
 aws_rules.yml
 !test-requirements.txt
@@ -54,3 +54,4 @@ execution_environment/context/_build/requirements.yml
 provisioner/packer/manifest.zip
 *-artifact-*.json
 provisioner/test.yml
+ansible.cfg

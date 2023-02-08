@@ -1,0 +1,591 @@
+---
+assets:
+    workflow_job_templates:
+    -   allow_simultaneous: false
+        ask_inventory_on_launch: false
+        ask_limit_on_launch: false
+        ask_scm_branch_on_launch: false
+        ask_variables_on_launch: false
+        description: ''
+        extra_vars: '---'
+        inventory: null
+        limit: null
+        name: SATELLITE / Patching Workflow
+        natural_key:
+            name: SATELLITE / Patching Workflow
+            organization: null
+            type: workflow_job_template
+        organization: null
+        related:
+            labels: []
+            notification_templates_approvals: []
+            notification_templates_error: []
+            notification_templates_started: []
+            notification_templates_success: []
+            survey_spec: {}
+            workflow_nodes:
+            -   all_parents_must_converge: false
+                diff_mode: null
+                extra_data: {}
+                identifier: c02534b0-dabc-4752-9641-47ab8f2372a6
+                inventory: null
+                job_tags: null
+                job_type: null
+                limit: null
+                natural_key:
+                    identifier: c02534b0-dabc-4752-9641-47ab8f2372a6
+                    type: workflow_job_template_node
+                    workflow_job_template:
+                        name: SATELLITE / Patching Workflow
+                        organization: null
+                        type: workflow_job_template
+                related:
+                    always_nodes: []
+                    credentials: []
+                    failure_nodes: []
+                    success_nodes:
+                    -   identifier: b38523da-4c09-4e10-bad9-9fa1bf9317ae
+                        type: workflow_job_template_node
+                        workflow_job_template:
+                            name: SATELLITE / Patching
+                                Workflow
+                            organization: null
+                            type: workflow_job_template
+                scm_branch: null
+                skip_tags: null
+                unified_job_template:
+                    inventory:
+                        name: RHEL7 Development
+                        organization:
+                            name: Default
+                            type: organization
+                        type: inventory
+                    name: EC2 Dynamic Source - RHEL7
+                        Development
+                    type: inventory_source
+                verbosity: null
+                workflow_job_template:
+                    name: SATELLITE / Patching Workflow
+                    organization: null
+                    type: workflow_job_template
+            -   all_parents_must_converge: false
+                diff_mode: null
+                extra_data:
+                    content_view: RHEL7
+                identifier: bb54d352-f36f-45ef-8edd-aa351472abaf
+                inventory: null
+                job_tags: null
+                job_type: null
+                limit: null
+                natural_key:
+                    identifier: bb54d352-f36f-45ef-8edd-aa351472abaf
+                    type: workflow_job_template_node
+                    workflow_job_template:
+                        name: SATELLITE / Patching Workflow
+                        organization: null
+                        type: workflow_job_template
+                related:
+                    always_nodes: []
+                    credentials: []
+                    failure_nodes: []
+                    success_nodes:
+                    -   identifier: 2b935344-9c87-4950-9a8c-abbfffb61c5e
+                        type: workflow_job_template_node
+                        workflow_job_template:
+                            name: SATELLITE / Patching
+                                Workflow
+                            organization: null
+                            type: workflow_job_template
+                scm_branch: null
+                skip_tags: null
+                unified_job_template:
+                    name: SATELLITE / RHEL - Publish
+                        Content View
+                    organization:
+                        name: Default
+                        type: organization
+                    type: job_template
+                verbosity: null
+                workflow_job_template:
+                    name: SATELLITE / Patching Workflow
+                    organization: null
+                    type: workflow_job_template
+            -   all_parents_must_converge: false
+                diff_mode: null
+                extra_data:
+                    content_view: RHEL7
+                    current_lifecycle_environment: RHEL7_Dev
+                    lifecycle_environment: RHEL7_QA
+                identifier: 2b935344-9c87-4950-9a8c-abbfffb61c5e
+                inventory: null
+                job_tags: null
+                job_type: null
+                limit: null
+                natural_key:
+                    identifier: 2b935344-9c87-4950-9a8c-abbfffb61c5e
+                    type: workflow_job_template_node
+                    workflow_job_template:
+                        name: SATELLITE / Patching Workflow
+                        organization: null
+                        type: workflow_job_template
+                related:
+                    always_nodes: []
+                    credentials: []
+                    failure_nodes: []
+                    success_nodes:
+                    -   identifier: 75721dbb-f993-43cb-8599-79e63b51993d
+                        type: workflow_job_template_node
+                        workflow_job_template:
+                            name: SATELLITE / Patching
+                                Workflow
+                            organization: null
+                            type: workflow_job_template
+                scm_branch: null
+                skip_tags: null
+                unified_job_template:
+                    name: SATELLITE / RHEL - Promote
+                        Content View
+                    organization:
+                        name: Default
+                        type: organization
+                    type: job_template
+                verbosity: null
+                workflow_job_template:
+                    name: SATELLITE / Patching Workflow
+                    organization: null
+                    type: workflow_job_template
+            -   all_parents_must_converge: false
+                diff_mode: null
+                extra_data: {}
+                identifier: b38523da-4c09-4e10-bad9-9fa1bf9317ae
+                inventory: null
+                job_tags: null
+                job_type: null
+                limit: null
+                natural_key:
+                    identifier: b38523da-4c09-4e10-bad9-9fa1bf9317ae
+                    type: workflow_job_template_node
+                    workflow_job_template:
+                        name: SATELLITE / Patching Workflow
+                        organization: null
+                        type: workflow_job_template
+                related:
+                    always_nodes: []
+                    credentials: []
+                    failure_nodes: []
+                    success_nodes:
+                    -   identifier: 75721dbb-f993-43cb-8599-79e63b51993d
+                        type: workflow_job_template_node
+                        workflow_job_template:
+                            name: SATELLITE / Patching
+                                Workflow
+                            organization: null
+                            type: workflow_job_template
+                scm_branch: null
+                skip_tags: null
+                unified_job_template:
+                    name: SERVER / RHEL7 - Fact Scan
+                    organization:
+                        name: Default
+                        type: organization
+                    type: job_template
+                verbosity: null
+                workflow_job_template:
+                    name: SATELLITE / Patching Workflow
+                    organization: null
+                    type: workflow_job_template
+            -   all_parents_must_converge: true
+                diff_mode: null
+                extra_data:
+                    check_only: 'yes'
+                    lifecycle_stage: RHEL7_Dev
+                identifier: 75721dbb-f993-43cb-8599-79e63b51993d
+                inventory: null
+                job_tags: null
+                job_type: null
+                limit: null
+                natural_key:
+                    identifier: 75721dbb-f993-43cb-8599-79e63b51993d
+                    type: workflow_job_template_node
+                    workflow_job_template:
+                        name: SATELLITE / Patching Workflow
+                        organization: null
+                        type: workflow_job_template
+                related:
+                    always_nodes: []
+                    credentials: []
+                    failure_nodes: []
+                    success_nodes: []
+                scm_branch: null
+                skip_tags: null
+                unified_job_template:
+                    name: SERVER / RHEL7 - Patch
+                    organization:
+                        name: Default
+                        type: organization
+                    type: job_template
+                verbosity: null
+                workflow_job_template:
+                    name: SATELLITE / Patching Workflow
+                    organization: null
+                    type: workflow_job_template
+        scm_branch: ''
+        survey_enabled: false
+        webhook_credential: null
+        webhook_service: ''
+    -   allow_simultaneous: false
+        ask_inventory_on_launch: false
+        ask_limit_on_launch: false
+        ask_scm_branch_on_launch: false
+        ask_variables_on_launch: false
+        description: ''
+        extra_vars: ''
+        inventory: null
+        limit: null
+        name: skip
+        natural_key:
+            name: skip
+            organization: null
+            type: workflow_job_template
+        organization: null
+        related:
+            labels: []
+            notification_templates_approvals: []
+            notification_templates_error: []
+            notification_templates_started: []
+            notification_templates_success: []
+            survey_spec: {}
+            workflow_nodes:
+            -   all_parents_must_converge: false
+                diff_mode: null
+                extra_data: {}
+                identifier: b3b36082-d8a7-427f-adde-4c71f36e8395
+                inventory: null
+                job_tags: null
+                job_type: null
+                limit: null
+                natural_key:
+                    identifier: b3b36082-d8a7-427f-adde-4c71f36e8395
+                    type: workflow_job_template_node
+                    workflow_job_template:
+                        name: skip
+                        organization: null
+                        type: workflow_job_template
+                related:
+                    always_nodes: []
+                    credentials: []
+                    failure_nodes: []
+                    success_nodes:
+                    -   identifier: 77bc2335-754f-457f-acde-e699499f52df
+                        type: workflow_job_template_node
+                        workflow_job_template:
+                            name: skip
+                            organization: null
+                            type: workflow_job_template
+                    -   identifier: e67a3d0a-465e-4859-8115-4f172fe46133
+                        type: workflow_job_template_node
+                        workflow_job_template:
+                            name: skip
+                            organization: null
+                            type: workflow_job_template
+                scm_branch: null
+                skip_tags: null
+                unified_job_template:
+                    name: CONVERT2RHEL / 01 - Take node
+                        snapshot
+                    organization:
+                        name: Default
+                        type: organization
+                    type: job_template
+                verbosity: null
+                workflow_job_template:
+                    name: skip
+                    organization: null
+                    type: workflow_job_template
+            -   all_parents_must_converge: false
+                diff_mode: null
+                extra_data:
+                    content_view: RHEL7
+                identifier: e048dddc-edb6-4daf-b192-0bcd71249aff
+                inventory: null
+                job_tags: null
+                job_type: null
+                limit: null
+                natural_key:
+                    identifier: e048dddc-edb6-4daf-b192-0bcd71249aff
+                    type: workflow_job_template_node
+                    workflow_job_template:
+                        name: skip
+                        organization: null
+                        type: workflow_job_template
+                related:
+                    always_nodes: []
+                    credentials: []
+                    failure_nodes: []
+                    success_nodes:
+                    -   identifier: b3b36082-d8a7-427f-adde-4c71f36e8395
+                        type: workflow_job_template_node
+                        workflow_job_template:
+                            name: skip
+                            organization: null
+                            type: workflow_job_template
+                scm_branch: null
+                skip_tags: null
+                unified_job_template:
+                    name: SATELLITE / RHEL - Publish
+                        Content View
+                    organization:
+                        name: Default
+                        type: organization
+                    type: job_template
+                verbosity: null
+                workflow_job_template:
+                    name: skip
+                    organization: null
+                    type: workflow_job_template
+            -   all_parents_must_converge: true
+                diff_mode: null
+                extra_data: {}
+                identifier: c3f3b595-f22b-469d-9190-b3983e065dec
+                inventory: null
+                job_tags: null
+                job_type: null
+                limit: null
+                natural_key:
+                    identifier: c3f3b595-f22b-469d-9190-b3983e065dec
+                    type: workflow_job_template_node
+                    workflow_job_template:
+                        name: skip
+                        organization: null
+                        type: workflow_job_template
+                related:
+                    always_nodes: []
+                    credentials: []
+                    failure_nodes: []
+                    success_nodes:
+                    -   identifier: b674d4c9-27d2-4cc1-afa5-91589056b977
+                        type: workflow_job_template_node
+                        workflow_job_template:
+                            name: skip
+                            organization: null
+                            type: workflow_job_template
+                scm_branch: null
+                skip_tags: null
+                unified_job_template:
+                    name: EC2 / Set instance tags based
+                        on Satellite(Foreman) facts
+                    organization:
+                        name: Default
+                        type: organization
+                    type: job_template
+                verbosity: null
+                workflow_job_template:
+                    name: skip
+                    organization: null
+                    type: workflow_job_template
+            -   all_parents_must_converge: false
+                diff_mode: null
+                extra_data:
+                    PREFIX: node
+                    env: Dev
+                identifier: 77bc2335-754f-457f-acde-e699499f52df
+                inventory: null
+                job_tags: null
+                job_type: null
+                limit: null
+                natural_key:
+                    identifier: 77bc2335-754f-457f-acde-e699499f52df
+                    type: workflow_job_template_node
+                    workflow_job_template:
+                        name: skip
+                        organization: null
+                        type: workflow_job_template
+                related:
+                    always_nodes: []
+                    credentials: []
+                    failure_nodes: []
+                    success_nodes:
+                    -   identifier: c3f3b595-f22b-469d-9190-b3983e065dec
+                        type: workflow_job_template_node
+                        workflow_job_template:
+                            name: skip
+                            organization: null
+                            type: workflow_job_template
+                scm_branch: null
+                skip_tags: null
+                unified_job_template:
+                    name: SERVER / RHEL7 - Register
+                    organization:
+                        name: Default
+                        type: organization
+                    type: job_template
+                verbosity: null
+                workflow_job_template:
+                    name: skip
+                    organization: null
+                    type: workflow_job_template
+            -   all_parents_must_converge: false
+                diff_mode: null
+                extra_data:
+                    PREFIX: node
+                    env: Dev
+                identifier: e67a3d0a-465e-4859-8115-4f172fe46133
+                inventory: null
+                job_tags: null
+                job_type: null
+                limit: null
+                natural_key:
+                    identifier: e67a3d0a-465e-4859-8115-4f172fe46133
+                    type: workflow_job_template_node
+                    workflow_job_template:
+                        name: skip
+                        organization: null
+                        type: workflow_job_template
+                related:
+                    always_nodes: []
+                    credentials: []
+                    failure_nodes: []
+                    success_nodes:
+                    -   identifier: c3f3b595-f22b-469d-9190-b3983e065dec
+                        type: workflow_job_template_node
+                        workflow_job_template:
+                            name: skip
+                            organization: null
+                            type: workflow_job_template
+                scm_branch: null
+                skip_tags: null
+                unified_job_template:
+                    name: SERVER / CentOS7 - Register
+                    organization:
+                        name: Default
+                        type: organization
+                    type: job_template
+                verbosity: null
+                workflow_job_template:
+                    name: skip
+                    organization: null
+                    type: workflow_job_template
+            -   all_parents_must_converge: false
+                diff_mode: null
+                extra_data: {}
+                identifier: b674d4c9-27d2-4cc1-afa5-91589056b977
+                inventory: null
+                job_tags: null
+                job_type: null
+                limit: null
+                natural_key:
+                    identifier: b674d4c9-27d2-4cc1-afa5-91589056b977
+                    type: workflow_job_template_node
+                    workflow_job_template:
+                        name: skip
+                        organization: null
+                        type: workflow_job_template
+                related:
+                    always_nodes: []
+                    credentials: []
+                    failure_nodes: []
+                    success_nodes:
+                    -   identifier: 515cccbe-4b67-4af5-8e4a-c4b740a8c6ca
+                        type: workflow_job_template_node
+                        workflow_job_template:
+                            name: skip
+                            organization: null
+                            type: workflow_job_template
+                    -   identifier: 3e2ac270-be0a-48ca-9b05-0a7e51464f0a
+                        type: workflow_job_template_node
+                        workflow_job_template:
+                            name: skip
+                            organization: null
+                            type: workflow_job_template
+                scm_branch: null
+                skip_tags: null
+                unified_job_template:
+                    name: EC2 / Set instance tag - AnsibleGroup
+                    organization:
+                        name: Default
+                        type: organization
+                    type: job_template
+                verbosity: null
+                workflow_job_template:
+                    name: skip
+                    organization: null
+                    type: workflow_job_template
+            -   all_parents_must_converge: false
+                diff_mode: null
+                extra_data:
+                    content_view: RHEL7
+                    env: Dev
+                identifier: 515cccbe-4b67-4af5-8e4a-c4b740a8c6ca
+                inventory: null
+                job_tags: null
+                job_type: null
+                limit: null
+                natural_key:
+                    identifier: 515cccbe-4b67-4af5-8e4a-c4b740a8c6ca
+                    type: workflow_job_template_node
+                    workflow_job_template:
+                        name: skip
+                        organization: null
+                        type: workflow_job_template
+                related:
+                    always_nodes: []
+                    credentials: []
+                    failure_nodes: []
+                    success_nodes: []
+                scm_branch: null
+                skip_tags: null
+                unified_job_template:
+                    name: CONTROLLER / Update inventories
+                        via dynamic sources
+                    organization:
+                        name: Default
+                        type: organization
+                    type: job_template
+                verbosity: null
+                workflow_job_template:
+                    name: skip
+                    organization: null
+                    type: workflow_job_template
+            -   all_parents_must_converge: false
+                diff_mode: null
+                extra_data:
+                    content_view: CentOS7
+                    env: Dev
+                identifier: 3e2ac270-be0a-48ca-9b05-0a7e51464f0a
+                inventory: null
+                job_tags: null
+                job_type: null
+                limit: null
+                natural_key:
+                    identifier: 3e2ac270-be0a-48ca-9b05-0a7e51464f0a
+                    type: workflow_job_template_node
+                    workflow_job_template:
+                        name: skip
+                        organization: null
+                        type: workflow_job_template
+                related:
+                    always_nodes: []
+                    credentials: []
+                    failure_nodes: []
+                    success_nodes: []
+                scm_branch: null
+                skip_tags: null
+                unified_job_template:
+                    name: CONTROLLER / Update inventories
+                        via dynamic sources
+                    organization:
+                        name: Default
+                        type: organization
+                    type: job_template
+                verbosity: null
+                workflow_job_template:
+                    name: skip
+                    organization: null
+                    type: workflow_job_template
+        scm_branch: null
+        survey_enabled: false
+        webhook_credential: null
+        webhook_service: ''
+changed: false
+failed: false
+...
