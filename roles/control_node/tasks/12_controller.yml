@@ -12,6 +12,7 @@
     dest: "{{ aap_dir }}/inventory"
   when: create_cluster is defined and create_cluster|bool
   no_log: true
+
 - name: run the Automation Controller installer
   shell: "{{ controller_install_command }}"
   args:
