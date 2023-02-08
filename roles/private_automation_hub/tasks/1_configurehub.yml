@@ -7,7 +7,6 @@
       ansible.builtin.include_tasks: "10_aap_setup.yml"
       tags:
         - aap_setup
-
   when: not pre_build|bool
 
 - block:
