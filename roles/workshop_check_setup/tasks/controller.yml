@@ -1,6 +1,6 @@
 ---
-- name: ensure workshop folder {{ ec2_name_prefix }} exists
-  file:
+- name: Ensure workshop folder {{ ec2_name_prefix }} exists
+  ansible.builtin.file:
     path: "{{ output_dir }}"
     state: directory
 
@@ -12,38 +12,40 @@
       ansible.builtin.assert:
         that:
           - manifest_download_url.startswith('https://')
-          - manifest_download_user is defined
-          - manifest_download_password is defined
+#          - manifest_download_user is defined
+#          - manifest_download_password is defined
+          - redhat_username is defined
+          - redhat_password is defined
         fail_msg: >-
-          manifest_download_url must be secure and requires manifest_download_user
+          manifest_download_url must be secure and requires redhat_username
           and manifest_download_password.
 
     - name: Download manifest.zip
       ansible.builtin.get_url:
         url: "{{ manifest_download_url }}"
         dest: "{{ playbook_dir }}/manifest.zip"
-        username: "{{ manifest_download_user }}"
-        password: "{{ manifest_download_password }}"
+        username: "{{ redhat_username }}"
+        password: "{{ redhat_password }}"
         force_basic_auth: true
 
-- name: check license block
+- name: Check license block
   block:
     - name: Check that the manifest.zip exists
-      stat:
+      ansible.builtin.stat:
         path: "{{ playbook_dir }}/manifest.zip"
       register: manifest_result
-    - fail:
+    - ansible.builtin.fail:
         msg: "Need a manifest file at {{ playbook_dir }}/manifest.zip"
       when:
         - not manifest_result.stat.exists
   rescue:
-    - name: checking for base64_manifest since no manifest.zip found
-      debug:
-        msg: checking for variable base64_manifest
+    - name: Checking for base64_manifest since no manifest.zip found
+      ansible.builtin.debug:
+        msg: Checking for variable base64_manifest
     - name: fail if there is also no base64_manifest
-      fail:
+      ansible.builtin.fail:
         msg: no manifest.zip file found and no base64_manifest variable found
       when: base64_manifest is not defined
     - name: Rescue worked, base64 var found
-      debug:
+      ansible.builtin.debug:
         msg: The variable base64_manifest was located

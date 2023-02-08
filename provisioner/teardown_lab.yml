@@ -5,48 +5,60 @@
   become: false
   gather_facts: true
   tasks:
-    - name: workshop collection final check
+    - name: Workshop collection final check
       block:
-        - name: run pre-check role to make sure workshop will complete provisioning
-          include_role:
+        - name: Run pre-check role to make sure workshop will complete provisioning
+          ansible.builtin.include_role:
             name: ../roles/workshop_check_setup
 
-        - name: run AWS check setup if using AWS
-          include_role:
+        - name: Run AWS check setup if using AWS
+          ansible.builtin.include_role:
             name: ../roles/aws_check_setup
       rescue:
         - name: Error with setup
-          fail:
+          ansible.builtin.fail:
             msg: The provisioner has failed during initial check_setup, please scroll up to see exact error.  Open an issue on https://github.com/ansible/workshops/issues
-    - name: load automation hub into inventory
-      include_role:
+    - name: Load automation hub into inventory
+      ansible.builtin.include_role:
         name: ../roles/manage_ec2_instances
         tasks_from: inventory/addhost_automation_hub.yml
+    - name: Save Private key from S3 Bucket
+      amazon.aws.aws_s3:
+        bucket: "{{ ec2_name_prefix | lower }}.{{ workshop_dns_zone }}.private"
+        mode: get
+        object: "{{ ec2_name_prefix }}-private.pem"
+        dest: "{{ playbook_dir }}/{{ ec2_name_prefix | lower }}/{{ ec2_name_prefix | lower }}-private.pem"
+        encrypt: true
+        region: "{{ ec2_region }}"
+    - name: Ensure key file has proper permissions
+      file:
+        dest: "{{ playbook_dir }}/{{ ec2_name_prefix }}/{{ ec2_name_prefix }}-private.pem"
+        mode: 0600
 
-- name: configure private automation hub
+- name: Configure private automation hub
   hosts: 'automation_hub'
-  gather_facts: false
+  gather_facts: true
   become: true
   vars:
     teardown: true
     state: absent
   tasks:
-    - name: check if pem exists
+    - name: Check if pem exists
       ansible.builtin.stat:
         path: "{{ playbook_dir }}/{{ ec2_name_prefix }}/{{ ec2_name_prefix }}-private.pem"
       register: pem_check
       ignore_unreachable: true
-    - name: set pemexist bool to true if pem exists
+    - name: Set pemexist bool to true if pem exists
       ansible.builtin.set_fact:
         pemexist: true
       when:
         - pem_check is defined
         - pem_check.stat is defined
         - pem_check.stat.exists
-    - name: gather_facts if pemexist
+    - name: Gather_facts if pemexist
       ansible.builtin.setup:
-      when: pemexist|default(false)|bool
-    - include_role:
+      when: pemexist | default(false) | bool
+    - ansible.builtin.include_role:
         name: ../roles/private_automation_hub
       when:
         - automation_hub is defined
@@ -66,10 +78,10 @@
     debug_teardown: false
 
   tasks:
-    - {include_role: {name: ../roles/manage_ec2_instances}}
-    - {include_role: {name: ../roles/aws_dns}, when: dns_type == "aws"}
-    - {include_role: {name: ../roles/gitlab_server}, when: workshop_type == "windows"}
-    - {include_role: {name: ../roles/workshop_attendance}, when: attendance}
+    - {ansible.builtin.include_role: {name: ../roles/manage_ec2_instances}}
+    - {ansible.builtin.include_role: {name: ../roles/aws_dns}, when: dns_type == "aws"}
+    - {ansible.builtin.include_role: {name: ../roles/gitlab_server}, when: workshop_type == "windows"}
+    - {ansible.builtin.include_role: {name: ../roles/workshop_attendance}, when: attendance}
     - name: Attempt RHPDS completion callback
       when:
       - agnosticd_callback_url != ''
@@ -108,6 +120,6 @@
       ignore_errors: true
 
     - name: Remove workshop local files
-      file:
+      ansible.builtin.file:
         dest: "{{ playbook_dir }}/{{ ec2_name_prefix }}"
         state: absent

@@ -1,15 +1,4 @@
 ---
-- name: Create tmp directory to store AAP tar.gz
-  tempfile:
-    state: directory
-    suffix: "aapbundle"
-  register: tempdir
-
-- name: copy AAP tar.gz
-  copy:
-    src: "{{ aap_archive | default(playbook_dir + '/aap.tar.gz') }}"
-    dest: "{{ tempdir.path }}/aap.tar.gz"
-
 - name: Create directory for automation controller
   file:
     path: "{{ aap_dir }}"

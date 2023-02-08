@@ -15,11 +15,6 @@
           include_role:
             name: ../roles/aws_check_setup
 
-        - name: download AAP
-          include_role:
-            name: ../roles/aap_download
-          when: not pre_build|bool
-
       rescue:
         - name: Error with setup
           fail:
@@ -94,6 +89,11 @@
         src: "{{ playbook_dir }}/{{ ec2_name_prefix }}/{{ student }}-etchosts.txt"
         dest: "/etc/hosts"
 
+    - name: download AAP
+      include_role:
+        name: ../roles/aap_download
+      when: not pre_build|bool
+
     - name: configure control_node role
       include_role:
         name: ../roles/control_node
@@ -134,6 +134,11 @@
   gather_facts: true
   become: true
   tasks:
+    - name: download AAP
+      include_role:
+        name: ../roles/aap_download
+      when: not pre_build|bool
+
     - include_role:
         name: ../roles/private_automation_hub
       when:

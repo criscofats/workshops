@@ -12,6 +12,7 @@
     dest: "{{ aap_dir }}/inventory"
   when: create_cluster is defined and create_cluster|bool
   no_log: true
+
 - name: run the Automation Controller installer
   shell: "{{ controller_install_command }}"
   args:
@@ -42,14 +43,13 @@
     msg: '{{ check2.json }}'
 
 # Certbot dependancy / acme, needs later version of requests library than task above^^
-- name: install awxkit and requests >2.14
+- name: install ansible-tower-cli and requests >2.14
   become: true
   ansible.builtin.pip:
     name:
-      - awxkit
-      - yamllint
+      - ansible-tower-cli
       - "requests==2.14.2"
-    executable: '/usr/bin/pip3.9'
+    executable: '/usr/bin/pip3.6'
     state: latest
 
 - name: load license block
