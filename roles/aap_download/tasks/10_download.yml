@@ -14,6 +14,7 @@
       client_id: "rhsm-api"
       refresh_token: "{{ offline_token }}"
   register: temp_token
+  no_log: true
   until: temp_token is not failed
   retries: 15
   delay: 20
