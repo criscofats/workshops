@@ -9,6 +9,8 @@
 # equivalent of 
 # curl https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token -d grant_type=refresh_token -d client_id=rhsm-api -d refresh_token=$offline_token
 - name: Generating an access token
+  when:
+    - manifest_download_url is defined
   uri:
     url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
     method: POST
@@ -22,42 +24,42 @@
   until: temp_token is not failed
   retries: 15
   delay: 20
+  block:
+    - name: Set fact for access token
+      ansible.builtin.set_fact:
+        rh_access_token: "{{ temp_token.json.access_token }}"
 
-- name: Set fact for access token
-  ansible.builtin.set_fact:
-    rh_access_token: "{{ temp_token.json.access_token }}"
-
-- name: Request manifest export
-  ansible.builtin.uri:
-    url: "{{ manifest_download_url }}/export"
-    method: GET
-    headers:
-      Authorization: "Bearer {{ rh_access_token }}"
-  register: rh_manifest_export_request
-- name: Register exportJobID
-  ansible.builtin.set_fact:
-    rh_export_job_id: "{{ rh_manifest_export_request['json']['body']['exportJobID'] }}"
-- name: Get export job status
-  ansible.builtin.uri:
-    url: "{{ manifest_download_url }}/exportJob/{{ rh_export_job_id | urlencode }}"
-    method: GET
-    headers:
-      Authorization: "Bearer {{ rh_access_token }}"
-    status_code:
-      - 200
-      - 202
-  register: rh_manifest_export_status
-  until: rh_manifest_export_status.status == 200
-  retries: 5
-  delay: 10
-- name: "Download manifest file to {{ playbook_dir }}/manifest.zip"
-  ansible.builtin.uri:
-    url: "{{ manifest_download_url }}/export/{{ rh_manifest_export_status['json']['body']['exportID'] | urlencode }}"
-    method: GET
-    headers:
-      Authorization: "Bearer {{ rh_access_token }}"
-    dest: "{{ playbook_dir }}/manifest.zip"
-  register: rh_manifest_download
+    - name: Request manifest export
+      ansible.builtin.uri:
+        url: "{{ manifest_download_url }}/export"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ rh_access_token }}"
+      register: rh_manifest_export_request
+    - name: Register exportJobID
+      ansible.builtin.set_fact:
+        rh_export_job_id: "{{ rh_manifest_export_request['json']['body']['exportJobID'] }}"
+    - name: Get export job status
+      ansible.builtin.uri:
+        url: "{{ manifest_download_url }}/exportJob/{{ rh_export_job_id | urlencode }}"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ rh_access_token }}"
+        status_code:
+          - 200
+          - 202
+      register: rh_manifest_export_status
+      until: rh_manifest_export_status.status == 200
+      retries: 5
+      delay: 10
+    - name: "Download manifest file to {{ playbook_dir }}/manifest.zip"
+      ansible.builtin.uri:
+        url: "{{ manifest_download_url }}/export/{{ rh_manifest_export_status['json']['body']['exportID'] | urlencode }}"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ rh_access_token }}"
+        dest: "{{ playbook_dir }}/manifest.zip"
+      register: rh_manifest_download
 
 - name: Check license block
   block:
