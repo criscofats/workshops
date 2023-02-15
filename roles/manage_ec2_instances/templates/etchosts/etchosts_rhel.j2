@@ -1,7 +1,7 @@
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 
-{% for vm in node1_output.instances %}
+{% for vm in node1_node_facts.instances %}
 {% if 'student' + item == vm.tags.Student %}
 {{ vm.private_ip_address }} {{ vm.tags.short_name }}.example.com {{ vm.tags.short_name }}
 {% endif %}
