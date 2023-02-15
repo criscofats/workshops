@@ -4,29 +4,60 @@
     path: "{{ output_dir }}"
     state: directory
 
-- name: Download manifest.zip
-  when:
-    - manifest_download_url is defined
-  block:
-    - name: Enforce use of user/password for manifest download
-      ansible.builtin.assert:
-        that:
-          - manifest_download_url.startswith('https://')
-#          - manifest_download_user is defined
-#          - manifest_download_password is defined
-          - redhat_username is defined
-          - redhat_password is defined
-        fail_msg: >-
-          manifest_download_url must be secure and requires redhat_username
-          and manifest_download_password.
+# https://access.redhat.com/articles/3626371#bgenerating-an-access-tokenb-4
+#
+# equivalent of 
+# curl https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token -d grant_type=refresh_token -d client_id=rhsm-api -d refresh_token=$offline_token
+- name: Generating an access token
+  uri:
+    url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+    method: POST
+    body_format: form-urlencoded
+    return_content: true
+    body:
+      grant_type: "refresh_token"
+      client_id: "rhsm-api"
+      refresh_token: "{{ offline_token }}"
+  register: temp_token
+  until: temp_token is not failed
+  retries: 15
+  delay: 20
 
-    - name: Download manifest.zip
-      ansible.builtin.get_url:
-        url: "{{ manifest_download_url }}"
-        dest: "{{ playbook_dir }}/manifest.zip"
-        username: "{{ redhat_username }}"
-        password: "{{ redhat_password }}"
-        force_basic_auth: true
+- name: Set fact for access token
+  ansible.builtin.set_fact:
+    rh_access_token: "{{ temp_token.json.access_token }}"
+
+- name: Request manifest export
+  ansible.builtin.uri:
+    url: "{{ manifest_download_url }}/export"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ rh_access_token }}"
+  register: rh_manifest_export_request
+- name: Register exportJobID
+  ansible.builtin.set_fact:
+    rh_export_job_id: "{{ rh_manifest_export_request['json']['body']['exportJobID'] }}"
+- name: Get export job status
+  ansible.builtin.uri:
+    url: "{{ manifest_download_url }}/exportJob/{{ rh_export_job_id | urlencode }}"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ rh_access_token }}"
+    status_code:
+      - 200
+      - 202
+  register: rh_manifest_export_status
+  until: rh_manifest_export_status.status == 200
+  retries: 5
+  delay: 10
+- name: "Download manifest file to {{ playbook_dir }}/manifest.zip"
+  ansible.builtin.uri:
+    url: "{{ manifest_download_url }}/export/{{ rh_manifest_export_status['json']['body']['exportID'] | urlencode }}"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ rh_access_token }}"
+    dest: "{{ playbook_dir }}/manifest.zip"
+  register: rh_manifest_download
 
 - name: Check license block
   block:
