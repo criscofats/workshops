@@ -13,7 +13,7 @@
     - manifest_download_url is defined
   block:
     - name: Generating an access token
-      uri:
+      ansible.builtin.uri:
         url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
         method: POST
         body_format: form-urlencoded
@@ -26,7 +26,7 @@
       until: temp_token is not failed
       retries: 15
       delay: 20
-      
+
     - name: Set fact for access token
       ansible.builtin.set_fact:
         rh_access_token: "{{ temp_token.json.access_token }}"
