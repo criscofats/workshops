@@ -58,8 +58,6 @@
     msg:
       - "admin_password cannot be set to ansible"
       - "please set a unique password for your workshop"
-  when: 
-    - not teardown
 
 - name: automation controller checks
   include_tasks: "controller.yml"
