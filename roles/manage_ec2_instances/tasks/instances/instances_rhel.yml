@@ -237,11 +237,11 @@
 # BOOK KEEPING FOR ABOVE async_status
 #   NOTE: Order matters here and must match the above task
 - ansible.builtin.set_fact:
-    node1_result: "{{ wait_for_ec2_instance_creation['results'][0] }}"
-    node2_result: "{{ wait_for_ec2_instance_creation['results'][1] }}"
-    node3_result: "{{ wait_for_ec2_instance_creation['results'][2] }}"
-    isonode_result: "{{ wait_for_ec2_instance_creation['results'][3] }}"
-    remotenode_result: "{{ wait_for_ec2_instance_creation['results'][4] }}"
+    node1_output: "{{ wait_for_ec2_instance_creation['results'][0] }}"
+    node2_output: "{{ wait_for_ec2_instance_creation['results'][1] }}"
+    node3_output: "{{ wait_for_ec2_instance_creation['results'][2] }}"
+    isonode_output: "{{ wait_for_ec2_instance_creation['results'][3] }}"
+    remotenode_output: "{{ wait_for_ec2_instance_creation['results'][4] }}"
 
     ###
     ###########################################################################
