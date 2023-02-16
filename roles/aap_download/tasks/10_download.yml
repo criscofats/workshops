@@ -22,6 +22,7 @@
 - name: Set fact for access token
   ansible.builtin.set_fact:
     rh_access_token: "{{ temp_token.json.access_token }}"
+  no_log: true
 
 - name: Request Ansible download links
   ansible.builtin.uri:
@@ -30,26 +31,15 @@
     headers:
       Authorization: "Bearer {{ rh_access_token }}"
   register: aap_download_links
-
-- name: Print links
-  ansible.builtin.debug:
-    msg: "{{ aap_download_links }}"
+  no_log: true
 
 - name: Select appropriate source
   ansible.builtin.set_fact:
     aap_bundle_select: "{{ aap_download_links['json']['body'] | selectattr('imageName', 'match', ansible_bundle_name) }}"
 
-- name: Print AAP bundle values
-  ansible.builtin.debug:
-    msg: "{{ aap_bundle_select[0]['checksum'] }}"
-
 - name: Register desired checksum facts
   ansible.builtin.set_fact:
     provided_sha_value: "{{ aap_bundle_select[0]['checksum'] }}"
-
-- name: Print checksum value
-  ansible.builtin.debug:
-    msg: "{{ provided_sha_value }}"
 
 # example sha: 0046367b76d7c3aca0d311a05935acd667438dfe9640db16f5027952d46dc470
 # curl -H "Authorization: Bearer $token"  "https://api.access.redhat.com/management/v1/images/{{ provided_sha_value }}/download"
