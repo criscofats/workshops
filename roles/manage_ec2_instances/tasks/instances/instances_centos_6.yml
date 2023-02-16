@@ -151,9 +151,9 @@
 # BOOK KEEPING FOR ABOVE async_status
 #   NOTE: Order matters here and must match the above task
 - ansible.builtin.set_fact:
-    node7_output: "{{ wait_for_ec2_instance_creation['results'][0] }}"
-    node8_output: "{{ wait_for_ec2_instance_creation['results'][1] }}"
-    node9_output: "{{ wait_for_ec2_instance_creation['results'][2] }}"
+    node7_result: "{{ wait_for_ec2_instance_creation['results'][0] }}"
+    node8_result: "{{ wait_for_ec2_instance_creation['results'][1] }}"
+    node9_result: "{{ wait_for_ec2_instance_creation['results'][2] }}"
 
     ###
     ###########################################################################
