@@ -11,6 +11,53 @@
     checksum_algorithm: sha256
   register: stat_var
 
+- name: Generating an access token
+  uri:
+    url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+    method: POST
+    body_format: form-urlencoded
+    return_content: true
+    body:
+      grant_type: "refresh_token"
+      client_id: "rhsm-api"
+      refresh_token: "{{ offline_token }}"
+  register: temp_token
+  until: temp_token is not failed
+  retries: 15
+  delay: 20
+
+- name: Set fact for access token
+  ansible.builtin.set_fact:
+    rh_access_token: "{{ temp_token.json.access_token }}"
+
+- name: Request Ansible download links
+  ansible.builtin.uri:
+    url: "https://api.access.redhat.com/management/v1/images/cset/ansible-automation-platform-2.3-for-rhel-8-x86_64-files"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ rh_access_token }}"
+  register: aap_download_links
+
+- name: Print links
+  ansible.builtin.debug:
+    msg: "{{ aap_download_links }}"
+
+- name: Select appropriate source
+  ansible.builtin.set_fact:
+    aap_bundle_select: "{{ aap_download_links['json']['body'] | selectattr('imageName', 'match', ansible_bundle_name) }}"
+
+- name: Print AAP bundle values
+  ansible.builtin.debug:
+    msg: "{{ aap_bundle_select[0]['checksum'] }}"
+
+- name: Register desired checksum facts
+  ansible.builtin.set_fact:
+    provided_sha_value: "{{ aap_bundle_select[0]['checksum'] }}"
+
+- name: Print checksum value
+  ansible.builtin.debug:
+    msg: "{{ provided_sha_value }}"
+    
 - name: attempt to download specified AAP from specified URL if we don't already have it
   when:
     - aap_download_url is defined
