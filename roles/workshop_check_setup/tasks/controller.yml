@@ -29,7 +29,7 @@
 
   - name: Request manifest export
     ansible.builtin.uri:
-      url: "{{ manifest_download_url }}/export"
+      url: "{{ manifest_download_url }}{{ manifest_uuid }}/export"
       method: GET
       headers:
         Authorization: "Bearer {{ rh_access_token }}"
@@ -41,7 +41,7 @@
 
   - name: Get export job status
     ansible.builtin.uri:
-      url: "{{ manifest_download_url }}/exportJob/{{ rh_export_job_id | urlencode }}"
+      url: "{{ manifest_download_url }}{{ manifest_uuid }}/exportJob/{{ rh_export_job_id | urlencode }}"
       method: GET
       headers:
         Authorization: "Bearer {{ rh_access_token }}"
@@ -55,7 +55,7 @@
 
   - name: "Download manifest file to {{ playbook_dir }}/manifest.zip"
     ansible.builtin.uri:
-      url: "{{ manifest_download_url }}/export/{{ rh_manifest_export_status['json']['body']['exportID'] | urlencode }}"
+      url: "{{ manifest_download_url }}{{ manifest_uuid }}/export/{{ rh_manifest_export_status['json']['body']['exportID'] | urlencode }}"
       method: GET
       headers:
         Authorization: "Bearer {{ rh_access_token }}"
