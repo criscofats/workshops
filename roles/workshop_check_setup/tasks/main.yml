@@ -62,7 +62,7 @@
 - name: automation controller checks
   include_tasks: "controller.yml"
   when:
-    - not teardown
+    - teardown is not defined
     - controllerinstall
 
 - name: check workshop specific information
