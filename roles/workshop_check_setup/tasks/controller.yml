@@ -4,8 +4,7 @@
     path: "{{ output_dir }}"
     state: directory
 
-- name: Setup Red Hat Subscription Allocation
-- name: Generating an access token
+- name: Setup Red Hat Subscription Allocation / Generating an access token
   uri:
     url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
     method: POST
