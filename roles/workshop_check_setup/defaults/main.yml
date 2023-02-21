@@ -8,5 +8,5 @@ redhat_contract_number: "13878715"
 redhat_sub_allocation_name: ansiblemanifestopenenv
 redhat_subscription_name: 'Employee SKU'
 redhat_entitlement_allocation_count: 10
-redhat_subscription_satellite_version: "sat-6.10"
+redhat_subscription_satellite_version: "sat-6.11"
 redhat_subscription_base_uri: "https://api.access.redhat.com/management/v1"
