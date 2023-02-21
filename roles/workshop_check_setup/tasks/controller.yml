@@ -7,7 +7,7 @@
 - name: Attempt to download pre-defined manifest by UUID
   when:
     - manifest_download_url is defined
-    - teardown is not defined
+    - not teardown|bool
   block:
   - name: Generating an access token
     uri:
@@ -67,7 +67,7 @@
 - name: Setup Red Hat Subscription Allocation when pre-defied manifest is not specified
   when:
     - manifest_download_url is not defined
-    - teardown is not defined
+    - not teardown|bool
   block:
   - name: Generating an access token
     uri:
@@ -202,7 +202,7 @@
 
 - name: Check license block
   when:
-    - teardown is not defined
+    - not teardown|bool
   block:
     - name: Check that the manifest.zip exists
       ansible.builtin.stat:
