@@ -201,6 +201,8 @@
     register: rh_manifest_download
 
 - name: Check license block
+  when:
+    - teardown is not defined
   block:
     - name: Check that the manifest.zip exists
       ansible.builtin.stat:
