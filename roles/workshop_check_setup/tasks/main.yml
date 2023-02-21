@@ -63,7 +63,7 @@
   include_tasks: "controller.yml"
   when:
     - controllerinstall
-    - not teardown|bool
+    - not teardown
 
 - name: check workshop specific information
   include_tasks: "{{item}}"
