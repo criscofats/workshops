@@ -7,7 +7,15 @@
 {% endif %}
 {% endfor %}
 
+{% if qradar is defined %}
 {% for vm in qradar_node_facts.instances %}
+{% if 'student' + item == vm.tags.Student %}
+{{ vm.public_ip_address }} {{ vm.tags.short_name }}
+{% endif %}
+{% endfor %}
+
+{% if splunk is defined %}
+{% for vm in splunk_node_facts.instances %}
 {% if 'student' + item == vm.tags.Student %}
 {{ vm.public_ip_address }} {{ vm.tags.short_name }}
 {% endif %}
