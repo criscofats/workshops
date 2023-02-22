@@ -8,20 +8,20 @@
 {% endfor %}
 {% endif %}
 
-{% if qradar is defined %}
+{% if qradar|bool %}
 {% for vm in qradar_node_facts.instances %}
 {% if 'student' + item == vm.tags.Student %}
 {{ vm.public_ip_address }} {{ vm.tags.short_name }}
 {% endif %}
 {% endfor %}
-{% endif %}
 
-{% if splunk is defined %}
+{% if splunk|bool %}
 {% for vm in splunk_node_facts.instances %}
 {% if 'student' + item == vm.tags.Student %}
 {{ vm.public_ip_address }} {{ vm.tags.short_name }}
 {% endif %}
 {% endfor %}
+{% endif %}
 
 {% for vm in attacker_node_facts.instances %}
 {% if 'student' + item == vm.tags.Student %}
