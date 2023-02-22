@@ -6,6 +6,7 @@
 {{ vm.public_ip_address }} {{ vm.tags.short_name }}
 {% endif %}
 {% endfor %}
+{% endif %}
 
 {% if qradar is defined %}
 {% for vm in qradar_node_facts.instances %}
@@ -13,6 +14,7 @@
 {{ vm.public_ip_address }} {{ vm.tags.short_name }}
 {% endif %}
 {% endfor %}
+{% endif %}
 
 {% if splunk is defined %}
 {% for vm in splunk_node_facts.instances %}
