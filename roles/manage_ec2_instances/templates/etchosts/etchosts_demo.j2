@@ -80,14 +80,15 @@
 {% endif %}
 {% endfor %}
 
-{% if qradar|bool %}
+{% if security_console == 'qradar' %}
 {% for vm in qradar_node_facts.instances %}
 {% if 'student' + item == vm.tags.Student %}
 {{ vm.public_ip_address }} {{ vm.tags.short_name }}
 {% endif %}
 {% endfor %}
+{% endif %}
 
-{% if splunk|bool %}
+{% if security_console == 'splunk' %}
 {% for vm in splunk_node_facts.instances %}
 {% if 'student' + item == vm.tags.Student %}
 {{ vm.public_ip_address }} {{ vm.tags.short_name }}
