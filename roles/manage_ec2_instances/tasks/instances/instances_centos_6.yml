@@ -1,4 +1,8 @@
 ---
+- ansible.builtin.set_fact:
+    async_timeout_seconds: "{{ student_total * 120 }}"
+    async_wait_for_retries: "{{ student_total * 10 }}"
+
 - name: Create EC2 instances for node7
   amazon.aws.ec2_instance:
     network:
@@ -37,45 +41,9 @@
           iops: "{{ ec2_info[centos6].disk_iops }}"
           throughput: "{{ ec2_info[centos6].disk_throughput }}"
           delete_on_termination: true
-
-- name: grab instance ids to tag node7
-  ec2_instance_info:
-    region: "{{ ec2_region }}"
-    filters:
-      instance-state-name: running
-      "tag:Workshop_node7": "{{ ec2_name_prefix }}-node7"
-  register: node7_output
-
-- name: Ensure tags are present for node7
-  amazon.aws.ec2_tag:
-    region: "{{ ec2_region }}"
-    resource: "{{ item.1.instance_id }}"
-    state: present
-    tags:
-      Name: "{{ ec2_name_prefix }}-student{{ item.0 + 1 }}-node7"
-      Index: "{{ item[0] }}"
-      Student: "student{{ item.0 + 1 }}"
-      launch_time: "{{ item.1.launch_time }}"
-  with_indexed_items:
-    - "{{ node7_output.instances }}"
-  when: node7_output.instances|length > 0
-
-- name: Associate IAM instance profile with node7
-  amazon.aws.ec2_instance:
-    instance_ids: "{{ item.1.instance_id }}"
-    region: "{{ ec2_region }}"
-    instance_role: "VPCLockDown_{{ ec2_name_prefix }}_student{{ item.0 + 1 }}"
-    state: running
-    wait: true
-  with_indexed_items:
-    - "{{ node7_output.instances }}"
-  register: associate_iam_instance_profile
-  until: associate_iam_instance_profile is not failed
-  retries: 12
-  delay: 10
-  when:
-    - node7_output.instances|length > 0
-    - tower_node_aws_api_access|default(false)|bool
+  async: "{{ async_timeout_seconds }}"
+  poll: 0
+  register: node7_async
 
 - name: Create EC2 instances for node8
   amazon.aws.ec2_instance:
@@ -115,44 +83,9 @@
           iops: "{{ ec2_info[centos6].disk_iops }}"
           throughput: "{{ ec2_info[centos6].disk_throughput }}"
           delete_on_termination: true
-
-- name: grab instance ids to tag them all
-  amazon.aws.ec2_instance_info:
-    region: "{{ ec2_region }}"
-    filters:
-      "tag:Workshop_node8": "{{ ec2_name_prefix }}-node8"
-  register: node8_output
-
-- name: Ensure tags are present for node8
-  amazon.aws.ec2_tag:
-    region: "{{ ec2_region }}"
-    resource: "{{ item.1.instance_id }}"
-    state: present
-    tags:
-      Name: "{{ ec2_name_prefix }}-student{{ item.0 + 1 }}-node8"
-      Index: "{{ item[0] }}"
-      Student: "student{{ item.0 + 1 }}"
-      launch_time: "{{ item.1.launch_time }}"
-  with_indexed_items:
-    - "{{ node8_output.instances }}"
-  when: node8_output.instances|length > 0
-
-- name: Associate IAM instance profile with node8
-  amazon.aws.ec2_instance:
-    instance_ids: "{{ item.1.instance_id }}"
-    region: "{{ ec2_region }}"
-    instance_role: "VPCLockDown_{{ ec2_name_prefix }}_student{{ item.0 + 1 }}"
-    state: running
-    wait: true
-  with_indexed_items:
-    - "{{ node8_output.instances }}"
-  register: associate_iam_instance_profile
-  until: associate_iam_instance_profile is not failed
-  retries: 12
-  delay: 10
-  when:
-    - node8_output.instances|length > 0
-    - tower_node_aws_api_access|default(false)|bool
+  async: "{{ async_timeout_seconds }}"
+  poll: 0
+  register: node8_async
 
 - name: Create EC2 instances for node9
   amazon.aws.ec2_instance:
@@ -192,8 +125,117 @@
           iops: "{{ ec2_info[centos6].disk_iops }}"
           throughput: "{{ ec2_info[centos6].disk_throughput }}"
           delete_on_termination: true
+  async: "{{ async_timeout_seconds }}"
+  poll: 0
+  register: node9_async
 
-- name: grab instance ids to tag node9
+###########################################################################
+### THIS IS A BIT OF A HACK AND REQUIRES BOOK KEEPING BUT IT'S FAST
+#
+#   The order in which the _async vars are listed here is the order in
+#   which they will be registered in the
+#   wait_for_ec2_instance_creation['results'] variable and that is important
+#   for the following set_fact that makes that information usable later on
+- name: Wait for async instance creation to complete
+  ansible.builtin.async_status:
+    jid: "{{ item['ansible_job_id'] }}"
+  register: wait_for_ec2_instance_creation
+  when: "'ansible_job_id' in item"
+  until: wait_for_ec2_instance_creation.finished
+  retries: "{{ [async_wait_for_retries | int, 60] | max }}"
+  loop:
+    - "{{ node7_async }}"
+    - "{{ node8_async }}"
+    - "{{ node9_async }}"
+
+# BOOK KEEPING FOR ABOVE async_status
+#   NOTE: Order matters here and must match the above task
+- ansible.builtin.set_fact:
+    node7_output: "{{ wait_for_ec2_instance_creation['results'][0] }}"
+    node8_output: "{{ wait_for_ec2_instance_creation['results'][1] }}"
+    node9_output: "{{ wait_for_ec2_instance_creation['results'][2] }}"
+
+    ###
+    ###########################################################################
+
+- name: Grab instance ids to tag node7
+  amazon.aws.ec2_instance_info:
+    region: "{{ ec2_region }}"
+    filters:
+      instance-state-name: running
+      "tag:Workshop_node7": "{{ ec2_name_prefix }}-node7"
+  register: node7_output
+
+- name: Ensure tags are present for node7
+  amazon.aws.ec2_tag:
+    region: "{{ ec2_region }}"
+    resource: "{{ item.1.instance_id }}"
+    state: present
+    tags:
+      Name: "{{ ec2_name_prefix }}-student{{ item.0 + 1 }}-node7"
+      Index: "{{ item[0] }}"
+      Student: "student{{ item.0 + 1 }}"
+      launch_time: "{{ item.1.launch_time }}"
+  with_indexed_items:
+    - "{{ node7_output.instances }}"
+  when: node7_output.instances|length > 0
+
+- name: Associate IAM instance profile with node7
+  amazon.aws.ec2_instance:
+    instance_ids: "{{ item.1.instance_id }}"
+    region: "{{ ec2_region }}"
+    instance_role: "VPCLockDown_{{ ec2_name_prefix }}_student{{ item.0 + 1 }}"
+    state: running
+    wait: true
+  with_indexed_items:
+    - "{{ node7_output.instances }}"
+  register: associate_iam_instance_profile
+  until: associate_iam_instance_profile is not failed
+  retries: 12
+  delay: 10
+  when:
+    - node7_output.instances|length > 0
+    - tower_node_aws_api_access|default(false)|bool
+
+- name: Grab instance ids to tag node8
+  amazon.aws.ec2_instance_info:
+    region: "{{ ec2_region }}"
+    filters:
+      "tag:Workshop_node8": "{{ ec2_name_prefix }}-node8"
+  register: node8_output
+
+- name: Ensure tags are present for node8
+  amazon.aws.ec2_tag:
+    region: "{{ ec2_region }}"
+    resource: "{{ item.1.instance_id }}"
+    state: present
+    tags:
+      Name: "{{ ec2_name_prefix }}-student{{ item.0 + 1 }}-node8"
+      Index: "{{ item[0] }}"
+      Student: "student{{ item.0 + 1 }}"
+      launch_time: "{{ item.1.launch_time }}"
+  with_indexed_items:
+    - "{{ node8_output.instances }}"
+  when: node8_output.instances|length > 0
+
+- name: Associate IAM instance profile with node8
+  amazon.aws.ec2_instance:
+    instance_ids: "{{ item.1.instance_id }}"
+    region: "{{ ec2_region }}"
+    instance_role: "VPCLockDown_{{ ec2_name_prefix }}_student{{ item.0 + 1 }}"
+    state: running
+    wait: true
+  with_indexed_items:
+    - "{{ node8_output.instances }}"
+  register: associate_iam_instance_profile
+  until: associate_iam_instance_profile is not failed
+  retries: 12
+  delay: 10
+  when:
+    - node8_output.instances|length > 0
+    - tower_node_aws_api_access|default(false)|bool
+
+- name: Grab instance ids to tag node9
   amazon.aws.ec2_instance_info:
     region: "{{ ec2_region }}"
     filters:
