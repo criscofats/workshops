@@ -74,3 +74,6 @@ ee_images:
 
 # Default EE that uses the registry credential (Default execution environment)
 ee_default_image: "{{ ee_registry_name }}/ansible-automation-platform-23/ee-supported-rhel8:latest"
+
+# Default EE that uses the registry credential (Default execution environment)
+ee_default_image: "{{ ee_registry_name }}/ansible-automation-platform-23/ee-supported-rhel8:latest"
