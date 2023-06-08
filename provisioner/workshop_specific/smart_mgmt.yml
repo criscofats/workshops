@@ -39,6 +39,11 @@
       when:
         - dns_type is defined
         - dns_type == 'aws'
+    - name: install podman
+      dnf:
+        name: podman
+        state: present
+        disable_gpg_check: true
     - name: create letsencrypt subdirectories
       file:
         path: "{{ item }}"
