@@ -1,7 +1,11 @@
 ---
+# Last Modified 2023-06-08 - cody
+#provided_sha_value: 7456b98f2f50e0e1d4c93fb4e375fe8a9174f397a5b1c0950915224f7f020ec4
 # Last Modified 2023-02-07 - cody
 #provided_sha_value: 0046367b76d7c3aca0d311a05935acd667438dfe9640db16f5027952d46dc470
 #provided_sha_value: 89109d6c7eafc298fd96c08e041be683e0b9d47752626fadda3e0e8350fd077e
 #provided_sha_value: e0a35e996d8b617d5a7800d2121337a6afa5a3794addc8550b9d3db82f4e1bbd
 #provided_sha_value: ca2541e6e7f74306197c3fe8a009c7a9b228342d0469e6707c943c8435b01fa2
+#provided_sha_value: 7456b98f2f50e0e1d4c93fb4e375fe8a9174f397a5b1c0950915224f7f020ec4
+
 ansible_bundle_name: 'Ansible Automation Platform 2.3 Setup Bundle'
