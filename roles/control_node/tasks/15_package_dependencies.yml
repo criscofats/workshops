@@ -22,6 +22,7 @@
       - bind-utils
       - jq
       - net-tools
+      - podman
     state: present
   register: dnf_check
   until: dnf_check is not failed
