@@ -32,7 +32,7 @@
 
 - name: Request Ansible download links
   ansible.builtin.uri:
-    url: "https://api.access.redhat.com/management/v1/images/cset/ansible-automation-platform-2.3-for-rhel-9-x86_64-files"
+    url: "https://api.access.redhat.com/management/v1/images/cset/ansible-automation-platform-2.3-for-rhel-8-x86_64-files"
     method: GET
     headers:
       Authorization: "Bearer {{ rh_access_token }}"
