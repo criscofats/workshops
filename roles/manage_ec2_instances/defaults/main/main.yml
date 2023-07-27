@@ -271,7 +271,7 @@ ec2_info:
     filter: 'RHEL-8*HVM-*Hourly*'
     username: ec2-user
   satellite:
-    owners: 551178754270
+    owners: 723450883993
     filter: Satellite*
     username: ec2-user
     os_type: linux
