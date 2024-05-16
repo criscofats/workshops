@@ -6,7 +6,7 @@ In this section we will show you step by step how to add pre commit linting to a
 
 If you are using the Workshop, a Workshop project should be available in your VSCode for you to push to the Workshop Gitea server. Create the files in this project folder.
 
-NOTE: If when you click on the Explorer tab that looks like two pieces of paper and you see "Open Folder" click on that. In the popup window click windows-workshop/workshop_project/ (full path is: `/home/student/windows-workshop/workshop_project`) then click "ok". If prompted select the check box and "Yes, I trust the authors" option. You should now see a readme that has a typo saying Welcome to Windows Automation workshop.
+<mark style="background-color: yellow">NOTE: If when you click on the Explorer tab that looks like two pieces of paper and you see "Open Folder" click on that. In the popup window click windows-workshop/workshop_project/ (full path is: `/home/student/windows-workshop/workshop_project`) then click "ok". If prompted select the check box and "Yes, I trust the authors" option. You should now see a readme that has a typo saying Welcome to Windows Automation workshop.</mark>
 
 ## Step 1
 
@@ -158,6 +158,12 @@ Further documentation for more hooks that can be added can be found here:
 - [github linguist](https://github.com/github/linguist/blob/master/docs/how-linguist-works.md)
 
 ## Step 5
+
+In your VSCode at the bottom left corner is a `gear`, click it and select `Settings`. Roughly the 5th option down should be `Editor: Render Whitespace` change it from `none` to `all`. This will help you visualize all the whitespace when you are working with documents.
+
+![render whitespace setting](images/render_whitespace.png)
+
+## Step 6
 
 Commit your current work so far. (note we won't mention it again but you should commit and push at the end of each section)
 

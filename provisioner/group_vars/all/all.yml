@@ -3,7 +3,7 @@ workshop_version: aug11-2022
 student_user: student
 admin_password: ansible
 code_server: true
-workshop_dns_zone: "rhdemo.io"
+workshop_dns_zone: "demoredhat.com"
 s3_state: "present"
 teardown: false
 controllerinstall: true
@@ -22,14 +22,11 @@ valid_workshop_types:
   - network
   - f5
   - rhel
-  - devops
   - security
   - windows
   - rhel_90
   - demo
-  - smart_mgmt
   - auto_satellite
-  - middleware
   - configascode
   - ripu
 network_type: multivendor
@@ -59,7 +56,6 @@ rhel_90_ee: "quay.io/acme_corp/rhel_90_ee:latest"
 windows_ee: "quay.io/acme_corp/windows_ee:latest"
 smart_mgmt_ee: "quay.io/s4v0/ee-automated-smart-mgmt-29:latest"
 auto_satellite_ee: "quay.io/s4v0/ee-automated-satellite-aap2:latest"
-demo_ee: "quay.io/s4v0/ee-automated-smart-mgmt-29:latest"
 configascode_ee: "registry.redhat.io/ansible-automation-platform-23/ee-minimal-rhel8:latest"
 ripu_ee: "registry.redhat.io/ansible-automation-platform-23/ee-supported-rhel8:1.0.0-208"
 
@@ -71,9 +67,6 @@ ee_images:
    - "{{ ee_registry_name }}/ansible-automation-platform-23/ee-29-rhel8:latest"
    - "{{ ee_registry_name }}/ansible-automation-platform-23/ee-supported-rhel8:latest"
    - "{{ ee_registry_name }}/ansible-automation-platform-23/ee-minimal-rhel8:latest"
-
-# Default EE that uses the registry credential (Default execution environment)
-ee_default_image: "{{ ee_registry_name }}/ansible-automation-platform-23/ee-supported-rhel8:latest"
 
 # Default EE that uses the registry credential (Default execution environment)
 ee_default_image: "{{ ee_registry_name }}/ansible-automation-platform-23/ee-supported-rhel8:latest"
