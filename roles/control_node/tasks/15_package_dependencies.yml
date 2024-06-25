@@ -1,7 +1,7 @@
 ---
 - name: Install EPEL
   dnf:
-    name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
+    name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm"
     state: present
     disable_gpg_check: true
 
@@ -22,7 +22,6 @@
       - bind-utils
       - jq
       - net-tools
-      - podman
     state: present
   register: dnf_check
   until: dnf_check is not failed
